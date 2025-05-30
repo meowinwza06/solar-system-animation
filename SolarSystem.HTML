@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ระบบสุริยะ</title>
+    <style>
+        canvas {
+            background-color:  #1e1e1e;
+            display: block ;
+            margin: 0 auto ;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="solarSystem" width="600" height="600" ></canvas>
+    <script>
+        const canvas = document.getElementById("solarSystem");
+        const ctx = canvas.getContext("2d");
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        let angleEarth = 0;
+        let angleMoon = 0; 
+        let angleJupiter = 0;
+        
+
+        function draw () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+            // sun
+            const sunGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 20);
+            sunGradient.addColorStop(0, "#FFD700");
+            sunGradient.addColorStop(1, "#FF8F00");
+
+
+            ctx.save(); // บันทึก context ปัจจุบัน
+            ctx.globalCompositeOperation = "lighter"; // โหมดซ้อนแสง
+
+            ctx.shadowColor = "rgba(255, 215, 0, 0.8)";
+            ctx.shadowBlur = 40;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+            ctx.fillStyle = sunGradient;
+            ctx.fill();
+            ctx.restore();
+
+            ctx.shadowColor = "transparent"; // ปิดเงา
+            ctx.shadowBlur = 0;
+
+           
+
+            const earthOrbitRadius = 150;
+            const earthX = centerX + earthOrbitRadius * Math.cos(angleEarth);
+            const earthY = centerY + earthOrbitRadius * Math.sin(angleEarth);
+
+
+            // Earth
+            ctx.beginPath();
+            ctx.arc(earthX, earthY, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = "deepskyblue";
+            ctx.fill();
+            
+
+            //Moon
+            const moonOrbitRadius =25;
+            const moonX = earthX + moonOrbitRadius * Math.cos(angleMoon);
+            const moonY = earthY + moonOrbitRadius * Math.sin(angleMoon);
+
+
+            ctx.beginPath();
+            ctx.arc (moonX, moonY, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = "gray";
+            ctx.fill();
+
+            angleEarth += 0.01;
+            angleMoon += 0.05;
+            angleJupiter += 0.001686;
+            
+
+
+            const JupiterOrbRadius = 250;
+            const JupiterX = centerX + JupiterOrbRadius * Math.cos(angleJupiter);
+            const JupiterY = centerY + JupiterOrbRadius * Math.sin(angleJupiter);
+
+            ctx.beginPath();
+            ctx.arc (JupiterX, JupiterY, 15, 0, 2 * Math.PI);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+
+
+            
+        
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+</body>
+</html>
